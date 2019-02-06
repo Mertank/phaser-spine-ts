@@ -1,11 +1,14 @@
 {
-    "compilerOptions": {
-        "outFile": "./bin/build.js",
-        "module": "system",
-        "target": "es5",
-        "sourceMap": true
-    },
-    "exclude": [
-      "node_modules"
-    ]
-  }
+	"compilerOptions": {
+		"module": "system",
+		"noImplicitAny": true,
+		"removeComments": true,
+		"preserveConstEnums": true,
+		"outFile": "bin/game.js",
+		"sourceMap": true,
+	},
+	"include": [
+		"src/**/*.ts",
+		"node_modules/phaser-ce/typescript/phaser.comments.d.ts"
+	]
+}
