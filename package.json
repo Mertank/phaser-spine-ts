@@ -5,7 +5,7 @@
   "main": "index.ts",
   "dependencies": {},
   "scripts": {
-    "build": "webpack",
+    "build": "webpack --mode development",
     "server": "http-server",
     "lint:source": "tslint -c ./tslint.json 'src/**/*.ts'",
     "lint:example": "tslint -c ./tslint.json 'example/**/*.ts'"
