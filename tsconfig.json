@@ -10,6 +10,7 @@
 	},
 	"include": [
 		"src/**/*.ts",
-		"node_modules/phaser-ce/typescript/phaser.comments.d.ts"
+		"example/**/*.ts",
+		"node_modules/phaser-ce/typescript/phaser.comments.d.ts", "example/Game.ts"
 	]
 }
