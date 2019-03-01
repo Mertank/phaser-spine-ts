@@ -6,7 +6,9 @@
   "dependencies": {},
   "scripts": {
     "build": "webpack",
-    "server": "http-server"
+    "server": "http-server",
+    "lint:source": "tslint -c ./tslint.json 'src/**/*.ts'",
+    "lint:example": "tslint -c ./tslint.json 'example/**/*.ts'"
   },
   "repository": {
     "type": "git",

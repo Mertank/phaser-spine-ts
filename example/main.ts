@@ -1,3 +1,3 @@
 import { Game } from './TestGame';
 
-var game = new Game();
+const game = new Game();
