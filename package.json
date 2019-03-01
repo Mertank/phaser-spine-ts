@@ -1,7 +1,7 @@
 {
-  "name": "phaser-spine-ts-test",
+  "name": "phaser-spine-ts",
   "version": "1.0.0",
-  "description": "Test consumer of phaser-spine-ts",
+  "description": "Phaser plugin to consume the spine-ts runtime",
   "main": "index.ts",
   "dependencies": {},
   "scripts": {
@@ -10,14 +10,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Mertank/phaser-spine-ts-test.git"
+    "url": "git+https://github.com/Mertank/phaser-spine-ts.git"
   },
   "author": "Karl Merten",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Mertank/phaser-spine-ts-test/issues"
+    "url": "https://github.com/Mertank/phaser-spine-ts/issues"
   },
-  "homepage": "https://github.com/Mertank/phaser-spine-ts-test#readme",
+  "homepage": "https://github.com/Mertank/phaser-spine-ts#readme",
   "devDependencies": {
     "phaser-ce": "2.11.1",
     "ts-loader": "^5.3.3",
