@@ -1,10 +1,14 @@
 {
-    "extends": [
-      "tslint:recommended"   
-    ],
+    "extends": "tslint:latest",
     "jsRules": {},
     "rules": {
         "quotemark": [true, "single"]
     },
-    "rulesDirectory": []
+    "rulesDirectory": [],
+    "linterOptions": {
+        "exclude": [
+            "node_modules/**/*.ts",
+            "spine-runtimes/**/*.ts"
+        ]
+    }
   }

@@ -12,16 +12,10 @@ module.exports = {
     ]
   },
   resolve: {
-    extensions: [ '.tsx', '.ts', '.js' ],
-    alias: {
-      'spine-ts': path.resolve('spine-runtimes/spine-ts/build/spine-core')
-    }
+    extensions: [ '.tsx', '.ts', '.js' ]
   },
   output: {
     filename: 'game.js',
     path: path.resolve(__dirname, 'bin')
-  },
-  externals: {
-    'spine-ts': 'spine-ts'
   }
 };

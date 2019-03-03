@@ -7,10 +7,17 @@
 		"preserveConstEnums": true,
 		"outDir": "bin/",
 		"sourceMap": true,
+		"plugins": [
+			{
+				"name": "typescript-tslint-plugin"
+			}
+		]
 	},
 	"include": [
+		"node_modules/phaser-ce/typescript/phaser.comments.d.ts",
+		"spine-runtimes/spine-ts/build/spine-core.d.ts",
 		"src/**/*.ts",
 		"example/**/*.ts",
-		"node_modules/phaser-ce/typescript/phaser.comments.d.ts", "example/Game.ts"
+		"example/Game.ts"
 	]
 }
