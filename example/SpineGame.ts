@@ -3,7 +3,7 @@ import * as plugin from '../src';
 /**
  * A Phaser.Game instance that is used for testing the plugin functionality which auto-binds the plugin
  */
-export class Game extends Phaser.Game {
+export class SpineGame extends Phaser.Game {
     public constructor() {
         super(
             1280, 720,

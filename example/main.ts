@@ -1,8 +1,7 @@
-import { Game } from './Game';
+import { SpineGame } from './SpineGame';
 import { SpineScene } from './SpineScene';
-import * as plugin from '../src';
 
-const game = new Game();
+const game = new SpineGame();
 
 game.state.add('Spine', SpineScene);
 game.state.start('Spine');
