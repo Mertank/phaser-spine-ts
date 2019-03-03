@@ -21,10 +21,16 @@ export class PhaserSpinePlugin extends Phaser.Plugin {
      * Handles the loading of resources for a spine asset through the Phaser.Loader
      *
      * @param key - The key for the spine asset that should be loaded
+     * @param url - The url to load the asset from. If it is undefined or null the url will be assumed to be the key.
+     * @param overwrite - If an unloaded file is in the queue, this will override that pending asset load
      *
      * @returns The Phaser.Loader instance to allow for chaining
      */
-    private loadSpineAssets(key: string): Phaser.Loader {
+    private loadSpineAssets(key: string, url?: string, overwrite: boolean = false): Phaser.Loader {
+        // Phaser assets are comprised of 3 files. The .atlas and .png for the spritesheet and the .json file for the animations.
+        // This queues all 3 to load.
+
+
         return this.game.load;
     }
 }
