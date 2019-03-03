@@ -18,6 +18,6 @@
 		"spine-runtimes/spine-ts/build/spine-core.d.ts",
 		"src/**/*.ts",
 		"example/**/*.ts",
-		"example/Game.ts"
+		"example/SpineGame.ts"
 	]
 }
