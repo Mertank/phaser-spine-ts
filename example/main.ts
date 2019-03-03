@@ -1,5 +1,6 @@
 import { Game } from './Game';
 import { SpineScene } from './SpineScene';
+import * as plugin from '../src';
 
 const game = new Game();
 
