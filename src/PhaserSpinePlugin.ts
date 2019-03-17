@@ -1,5 +1,4 @@
 import { PhaserSpineLoader } from './PhaserSpineLoader';
-import { PhaserSpineKeys } from './PhaserSpineKeys';
 
 /**
  * Load callback from Phaser
@@ -20,6 +19,12 @@ export class PhaserSpinePlugin extends Phaser.Plugin {
             console.warn('PhaserSpinePlugin.init - Something is already bound to game.load.spine. Loader could not be initialized.');
         } else {
             loader.spine = this.loadSpineAssets.bind(this);
+        }
+
+        if (loader.spineAnimations) {
+            console.warn('PhaserSpinePlugin.init - Something is already bound to game.load.spineAnimations. Loader could not be initialized.');
+        } else {
+            loader.spineAnimations = this.loadSpineAnimations.bind(this);
         }
     }
 
@@ -103,5 +108,17 @@ export class PhaserSpinePlugin extends Phaser.Plugin {
             this.game.load.addToFileList('image', imageKey, `${spineUrlRoot}${spineAtlasImages[i]}`, undefined, overwrite);
         }
         this.game.load.path = currentLoaderPath;
+    }
+
+    /**
+     * Loads a spine animations file
+     *
+     * @param key - The key to load the spine animations into
+     * @param url - The url of the spine animations file
+     * @param overwrite - If there is an existing asset at this key should this one overwrite it
+     */
+    private loadSpineAnimations(key: string, url?: string, overwrite?: boolean): Phaser.Loader {
+        this.game.load.addToFileList('json', key, url, undefined, overwrite, '.json');
+        return this.game.load;
     }
 }
