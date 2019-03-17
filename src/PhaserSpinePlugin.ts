@@ -2,6 +2,11 @@ import { PhaserSpineLoader } from './PhaserSpineLoader';
 import { PhaserSpineKeys } from './PhaserSpineKeys';
 
 /**
+ * Load callback from Phaser
+ */
+type LoadCallback = (progress: number, key: string, success: boolean) => void;
+
+/**
  * This plugin adds a loading helper to the Phaser.Loader which is assigned to game.load
  * as well as a factory on game.create to allow for the creation of spine objects in the Phaser world
  */
@@ -29,6 +34,8 @@ export class PhaserSpinePlugin extends Phaser.Plugin {
      */
     private loadSpineAssets(key: string, url?: string, overwrite: boolean = false): Phaser.Loader {
         const atlasKey: string = `${key}Atlas`;
+        // Path may get changed between the load and complete call. We want it to persist though for the images we load later.
+        const loaderPath: string = this.game.load.path;
         
         // Since the key is being modified build the URL here to 
         let atlasUrl: string = url;
@@ -37,25 +44,64 @@ export class PhaserSpinePlugin extends Phaser.Plugin {
         }
 
         this.game.load.addToFileList('text', atlasKey, atlasUrl, undefined, overwrite, '.atlas');
-        const loadCallback: (progress: number, key: string, success: boolean) => void = (progress: number, key: string, success: boolean) => {
+        const loadCallback: LoadCallback = (progress: number, loadedKey: string, success: boolean) => {
             // The atlas was loaded. Parse through it to find all the images we need to load on top of this
-            if (success && key === atlasKey) {
+            if (success && loadedKey === atlasKey) {
                 this.game.load.onFileComplete.remove(loadCallback);
-
-                // In spine each 'page' is an image. They are seperated by blank lines. This just plucks the image files from there.
-                const spineAtlasData: string = this.game.cache.getText(atlasKey);
-                const spineAtlasLines: string[] = spineAtlasData.split(/\r\n|\r|\n/);
-                const spineAtlasImages: string[] = [];
-                // Ignoring the last line because we can't read past it anyway
-                for (let i: number = 0; i < spineAtlasLines.length - 1; ++i) {
-                    if (spineAtlasLines[i].length === 0) {
-                        spineAtlasImages.push(spineAtlasLines[i + 1]);
-                    }
-                }
+                this.processAtlasFile(this.game.cache.getText(atlasKey), key, atlasUrl, loaderPath, overwrite);
             }
         };
         this.game.load.onFileComplete.add(loadCallback);
 
         return this.game.load;
+    }
+
+    /**
+     * Called when the .atlas file has downloaded successfully.
+     *
+     * @param spineAtlasData - The atlas data that was just downloaded
+     * @param spineKey - The key the spine full spine
+     * @param spineUrl - The url for the spine file. Since all the images are relative to the file it's just going to do replacements on this url
+     * @param loaderPath - Feeding through the loader path so that we can persist it from the atlas
+     * @param overwrite - If an unloaded file is in the queue, this will override that pending asset load
+     */
+    private processAtlasFile(spineAtlasData: string, spineKey: string, spineUrl: string, loaderPath: string, overwrite: boolean): void {
+        // In spine each 'page' is an image. They are seperated by blank lines. This just plucks the image files from there.
+        const spineAtlasLines: string[] = spineAtlasData.split(/\r\n|\r|\n/);
+        const spineAtlasImages: string[] = [];
+        const spineUrlRoot: string = spineUrl.substr(0, spineUrl.lastIndexOf('/'));
+        const currentLoaderPath: string = this.game.load.path;
+        
+        // Ignoring the last line because we can't read past it anyway
+        for (let i: number = 0; i < spineAtlasLines.length - 1; ++i) {
+            if (spineAtlasLines[i].length === 0) {
+                spineAtlasImages.push(spineAtlasLines[i + 1]);
+            }
+        }
+
+        // Load all the images for this atlas
+        const pendingImages: string[] = [];
+        const imageLoadedCallback: LoadCallback = (progress: number, key: string, success: boolean) => {
+            const imageIndex: number = pendingImages.indexOf(key);
+            if (success && imageIndex > -1) {
+                pendingImages.splice(imageIndex, 1);
+
+                // All images have been loaded succesfully
+                if (pendingImages.length === 0) {
+                    // We're going to manually dispatch this signal with the spine key
+                    this.game.load.onFileComplete.dispatch(100, spineKey, true, spineAtlasImages.length + 1);
+                    this.game.load.onFileComplete.remove(imageLoadedCallback);                    
+                }
+            }
+        };
+        this.game.load.onFileComplete.add(imageLoadedCallback);
+
+        this.game.load.path = loaderPath;
+        for (let i: number = 0; i < spineAtlasImages.length; ++i) {
+            const imageKey: string = `${spineKey}-${spineAtlasImages[i]}`;
+            pendingImages.push(imageKey);
+            this.game.load.addToFileList('image', imageKey, `${spineUrlRoot}${spineAtlasImages[i]}`, undefined, overwrite);
+        }
+        this.game.load.path = currentLoaderPath;
     }
 }
